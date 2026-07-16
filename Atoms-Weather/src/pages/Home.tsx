@@ -1,12 +1,28 @@
+import { useEffect } from "react";
+import { motion } from "framer-motion";
+
 import Navbar from "../components/layout/Navbar";
 import SearchBar from "../components/ui/SearchBar";
 import WeatherCard from "../components/weather/WeatherCard";
-
 import backgroundImage from "../assets/images/colombo.jpg";
 
-import { motion } from "framer-motion";
+import { getWeather } from "../services/weatherApi";
 
 function Home() {
+
+  useEffect(() => {
+    async function fetchWeather() {
+      try {
+        const data = await getWeather("Colombo");
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchWeather();
+  }, []);
+
   return (
     <div
       className="relative min-h-screen bg-cover bg-center"
@@ -14,12 +30,9 @@ function Home() {
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Foreground Content */}
       <div className="relative z-10">
-
         <Navbar />
 
         <div
@@ -41,9 +54,7 @@ function Home() {
           >
             <WeatherCard />
           </motion.div>
-
         </div>
-
       </div>
     </div>
   );
